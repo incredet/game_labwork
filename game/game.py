@@ -50,7 +50,7 @@ class Room():
 defent = 0
 class Enemy():
     """Enemy"""
-
+    defent = 0
     def __init__(self, name, description):
         """ """
         self.name = name
@@ -76,12 +76,13 @@ class Enemy():
     def fight(self, fight_with):
         """ """
         print(f"You fend {self.name} off with the {fight_with}")
-        return fight_with == self.weakness
+        if fight_with == self.weakness:
+            Enemy.defent += 1
+            return True
 
     def get_defeated(self, defent = defent):
         """ """
-        defent = defent + 1
-        return defent
+        return Enemy.defent
 
 
 class Item():
