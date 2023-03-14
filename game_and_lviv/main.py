@@ -102,7 +102,8 @@ current_room = library
 sumka = []
 print("Hello!!! You have to kill all enemies and come back here! Good luck!\n")
 while dead == False:
-    if current_room == library and first == False:
+    inhabitant = current_room.get_character()
+    if current_room == library and first == False and loses == 3:
         print("Congrats!!! You did it!!!")
         dead = True
     else:
@@ -110,7 +111,6 @@ while dead == False:
         print("available commands:\n north, south, east, west\n ask for hint, ask for help\n talk, fight, take\n")
         current_room.get_details()
         
-        inhabitant = current_room.get_character()
         if inhabitant is not None:
             inhabitant.describe()
         
@@ -157,14 +157,26 @@ while dead == False:
                         if inhabitant.fight(fight_with) == True:
                             print("Hooray, you won the fight!")
                             current_room.character = None
-                            if inhabitant.get_defeated() == 3:
+                            loses = inhabitant.get_defeated()
+                            if loses == 3:
                                 print("Congratulations, you have vanquished the enemy horde!")
                         elif inhabitant.fight(fight_with) == False and inhabitant.get_health() == 0.5:
                             print("Enemy is not dead yet... Come again!")
                         else:
-                            print("Oh dear, you lost the fight.")
-                            print("That's the end of the game")
-                            dead = True
+                            if "ліки" in sumka:
+                                print("Oh dear, you lost the fight.")
+                                print("You got one more chance! Do you want to use it?")
+                                ans = input("> ")
+                                if ans == "yes" or ans == "y" or ans == "так":
+                                    print("Good Luck!")
+                                else:
+                                    print("Oh dear, you lost the fight.")
+                                    print("That's the end of the game")
+                                    dead = True
+                            else:
+                                print("Oh dear, you lost the fight.")
+                                print("That's the end of the game")
+                                dead = True
                     else:
                         print("You don't have a " + fight_with)
                 elif isinstance(inhabitant, kalushgame.Enemy):
@@ -174,14 +186,24 @@ while dead == False:
                         if inhabitant.fight(fight_with) == True:
                             print("Hooray, you won the fight!")
                             current_room.character = None
-                            if inhabitant.get_defeated() == 3:
+                            loses = inhabitant.get_defeated()
+                            if loses == 3:
                                 print("Congratulations, you have vanquished the enemy horde!")
-                                dead = True
                         else:
-                            # What happens if you lose?
-                            print("Oh dear, you lost the fight.")
-                            print("That's the end of the game")
-                            dead = True
+                            if "ліки" in sumka:
+                                print("Oh dear, you lost the fight.")
+                                print("You got one more chance! Do you want to use it?")
+                                ans = input("> ")
+                                if ans == "yes" or ans == "y" or ans == "так":
+                                    print("Good Luck!")
+                                else:
+                                    print("Oh dear, you lost the fight.")
+                                    print("That's the end of the game")
+                                    dead = True
+                            else:
+                                print("Oh dear, you lost the fight.")
+                                print("That's the end of the game")
+                                dead = True
                     else:
                         print("You don't have a " + fight_with)
                 else:
