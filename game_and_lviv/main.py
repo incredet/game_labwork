@@ -61,23 +61,23 @@ teacher.set_weakness(["кавуся", "книжка"])
 grammar_school.set_character(teacher)
 
 # setting weapons
-book = kalushgame.Weapon("книжка")
+book = kalushgame.Item("книжка")
 book.set_description("Дуже цінна книжка. 'Алгебра. 10 клас.'")
 library.set_item(book)
 
-flower = kalushgame.Weapon("чічка")
+flower = kalushgame.Item("чічка")
 flower.set_description("Ну дуже-дуже гарна чічка!")
 
-coffee = kalushgame.Weapon("кавуся")
+coffee = kalushgame.Item("кавуся")
 coffee.set_description("Дуже гарна КАЛУСЬКА кавуся!!!")
 coffee_shop.set_item(coffee)
 
-rock = kalushgame.Weapon("камінь")
+rock = kalushgame.Item("камінь")
 rock.set_description("Камінь. Можна кинути.")
 heroes_square.set_item(rock)
 
 # setting support
-medicine = kalushgame.Support("ліки")
+medicine = kalushgame.Item("ліки")
 medicine.set_description("Дуже ефективні ліки. Майже подорожник")
 
 # setting friends
@@ -100,24 +100,29 @@ first = True
 dead = False
 current_room = library
 sumka = []
+loses = 0
+
 print("Hello!!! You have to kill all enemies and come back here! Good luck!\n")
-while dead == False:
+
+
+while not dead:
     inhabitant = current_room.get_character()
-    if current_room == library and first == False and loses == 3:
+    if current_room == library and not first and loses == 3:
         print("Congrats!!! You did it!!!")
         dead = True
     else:
         print('\n')
-        print("available commands:\n north, south, east, west\n ask for hint, ask for help\n talk, fight, take\n")
+        print("available commands:\n north, south, east,\
+ west\n ask for hint, ask for help\n talk, fight, take\n")
         current_room.get_details()
-        
+
         if inhabitant is not None:
             inhabitant.describe()
-        
+
         item = current_room.get_item()
         if item is not None:
             item.describe()
-        
+
         command = input("> ")
         if command in ["north", "south", "east", "west"]:
             current_room = current_room.move(command)
@@ -154,13 +159,13 @@ while dead == False:
                     print("What will you fight with?")
                     fight_with = input('> ')
                     if fight_with in sumka:
-                        if inhabitant.fight(fight_with) == True:
+                        if inhabitant.fight(fight_with):
                             print("Hooray, you won the fight!")
                             current_room.character = None
                             loses = inhabitant.get_defeated()
                             if loses == 3:
                                 print("Congratulations, you have vanquished the enemy horde!")
-                        elif inhabitant.fight(fight_with) == False and inhabitant.get_health() == 0.5:
+                        elif not inhabitant.fight(fight_with) and inhabitant.get_health() == 0.5:
                             print("Enemy is not dead yet... Come again!")
                         else:
                             if "ліки" in sumka:
@@ -183,7 +188,7 @@ while dead == False:
                     print("What will you fight with?")
                     fight_with = input('> ')
                     if fight_with in sumka:
-                        if inhabitant.fight(fight_with) == True:
+                        if inhabitant.fight(fight_with):
                             print("Hooray, you won the fight!")
                             current_room.character = None
                             loses = inhabitant.get_defeated()
